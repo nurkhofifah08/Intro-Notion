@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Selamat datang</title>
+
+<!-- ============ EDIT BAGIAN INI SAJA ============ -->
+<script>
+  const CONFIG = {
+    banner: "banner.png",   // nama file banner (satu folder dengan index.html)
+    linkNotion: "https://app.notion.com/p/LEARNING-HUB-ADAPTIF-3db804cf7cd480c9ad11f0fda08afa72?source=copy_link",
+    detik: 7,               // lama banner tampil sebelum pindah
+    warnaLatar: "#7ebfff"   // warna di sekeliling banner (kode hex)
+  };
+</script>
+<!-- ============================================== -->
+
+<style>
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 16px;
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    color: #fff;
+  }
+  #banner {
+    display: block;
+    max-width: min(100%, 1100px);
+    max-height: 72vh;
+    width: auto;
+    height: auto;
+    border-radius: 14px;
+    box-shadow: 0 10px 40px rgba(0,0,0,.35);
+    animation: masuk .6s ease both;
+  }
+  @keyframes masuk {
+    from { opacity: 0; transform: scale(.97); }
+    to   { opacity: 1; transform: none; }
+  }
+  .bawah { width: min(100%, 420px); text-align: center; }
+  .bar { height: 6px; background: rgba(255,255,255,.25); border-radius: 3px; overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 0; background: #fff; }
+  .info { margin: 10px 0 14px; font-size: 13px; opacity: .8; }
+  .lewati {
+    display: inline-block;
+    padding: 10px 22px;
+    border-radius: 999px;
+    background: #fff;
+    color: #111;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .lewati:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) { #banner { animation: none; } }
+</style>
+</head>
+<body>
+  <img id="banner" alt="Banner profil pengembang">
+  <div class="bawah">
+    <div class="bar"><i id="isi"></i></div>
+    <p class="info" id="info"></p>
+    <a class="lewati" id="lewati" href="#">Lewati, buka Notion</a>
+  </div>
+
+<script>
+  const $ = id => document.getElementById(id);
+  document.body.style.background = CONFIG.warnaLatar;
+  $("banner").src = CONFIG.banner;
+  $("lewati").href = CONFIG.linkNotion;
+
+  // Kalau banner gagal dimuat, sembunyikan gambarnya
+  $("banner").onerror = () => { $("banner").style.display = "none"; };
+
+  const total = CONFIG.detik * 1000;
+  const mulai = Date.now();
+  const timer = setInterval(() => {
+    const lewat = Date.now() - mulai;
+    $("isi").style.width = Math.min(100, lewat / total * 100) + "%";
+    $("info").textContent = "Membuka Notion dalam " + Math.max(0, Math.ceil((total - lewat) / 1000)) + " detik...";
+    if (lewat >= total) {
+      clearInterval(timer);
+      window.location.replace(CONFIG.linkNotion);
+    }
+  }, 100);
+</script>
+</body>
+</html>
